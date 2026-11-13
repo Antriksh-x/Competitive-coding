@@ -1,0 +1,470 @@
+# Competitive Coding – II (CC-II)
+ Unit 2 Practical Experiments
+
+**Student Name:** Antriksh Sharma  
+**Degree:** B.E. – Data Science  
+**Semester:** 5th Semester  
+**Subject Code:** 24CSP-339  
+**Subject:** Competitive Coding – II  
+**Programming Language:** C++  
+**University:** Chandigarh University  
+
+---
+
+# Experiment 2.1: Is Graph Bipartite?
+
+ 1. Aim
+To determine whether a given undirected graph is bipartite using Breadth First Search (BFS). A graph is bipartite if its vertices can be divided into two sets such that no two adjacent vertices belong to the same set.
+
+ 2. Software Requirements
+- Operating System: Windows 10/11 or Linux
+- Programming Language: C++
+- IDE: VS Code / CodeBlocks / Online Compiler
+
+ 3. Test Cases
+
+**Test Case 1**
+
+Input:
+```text
+graph = [[1,3],[0,2],[1,3],[0,2]]
+```
+
+Output:
+```text
+true
+```
+
+Explanation: The graph can be divided into two sets without any adjacent vertices belonging to the same set.
+
+**Test Case 2**
+
+Input:
+```text
+graph = [[1,2,3],[0,2],[0,1,3],[0,2]]
+```
+
+Output:
+```text
+false
+```
+
+Explanation: The graph contains an odd-length cycle, so it is not bipartite.
+
+ 4. Algorithm
+1. Initialize a color array with -1 for all vertices.
+2. Traverse every vertex of the graph.
+3. If a vertex is uncolored, start BFS from that vertex.
+4. Assign color 0 to the starting vertex.
+5. Visit all adjacent vertices.
+6. Assign the opposite color to uncolored adjacent vertices.
+7. If two adjacent vertices have the same color, return false.
+8. If all vertices are colored successfully, return true.
+
+ 5. Pseudocode
+
+```text
+START
+INPUT graph
+INITIALIZE color array with -1
+
+FOR each vertex i
+    IF color[i] == -1
+        SET color[i] = 0
+        PUSH i into queue
+
+        WHILE queue is not empty
+            REMOVE vertex u from queue
+
+            FOR each adjacent vertex v
+                IF color[v] == -1
+                    color[v] = 1 - color[u]
+                    PUSH v into queue
+                ELSE IF color[v] == color[u]
+                    RETURN false
+
+RETURN true
+END
+```
+
+ 6. C++ Code
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+
+class Solution {
+public:
+    bool isBipartite(vector<vector<int>>& graph) {
+        int n = graph.size();
+
+        vector<int> color(n, -1);
+
+        for (int i = 0; i < n; i++) {
+            if (color[i] == -1) {
+                queue<int> q;
+
+                q.push(i);
+                color[i] = 0;
+
+                while (!q.empty()) {
+                    int node = q.front();
+                    q.pop();
+
+                    for (int adj : graph[node]) {
+                        if (color[adj] == -1) {
+                            color[adj] = 1 - color[node];
+                            q.push(adj);
+                        }
+                        else if (color[adj] == color[node]) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+};
+
+int main() {
+    vector<vector<int>> graph = {
+        {1, 3},
+        {0, 2},
+        {1, 3},
+        {0, 2}
+    };
+
+    Solution s;
+
+    if (s.isBipartite(graph))
+        cout << "true" << endl;
+    else
+        cout << "false" << endl;
+
+    return 0;
+}
+```
+
+ 7. Output
+
+```text
+true
+```
+
+ 8. Complexity Analysis
+- Time Complexity: O(V + E)
+- Space Complexity: O(V)
+
+Where V represents the number of vertices and E represents the number of edges.
+
+ 9. Learning Outcomes
+- Understood the concept of graphs.
+- Learned the implementation of BFS.
+- Understood graph coloring techniques.
+- Learned how to identify bipartite graphs.
+- Improved graph-based problem-solving skills.
+
+ 10. Conclusion
+The Is Graph Bipartite problem was solved using BFS and graph coloring. Each vertex was assigned one of two colors, ensuring that no two adjacent vertices had the same color.
+
+---
+
+# Experiment 2.2: Find the Difference
+
+1. Aim
+To find the extra character present in string `t` when string `t` is formed by randomly shuffling the characters of string `s` and adding one additional character.
+
+ 2. Software Requirements
+- Operating System: Windows 10/11 or Linux
+- Programming Language: C++
+- IDE: VS Code / CodeBlocks / Online Compiler
+
+ 3. Test Cases
+
+**Test Case 1**
+
+Input:
+```text
+s = "abcd"
+t = "abcde"
+```
+
+Output:
+```text
+e
+```
+
+Explanation: The character 'e' is present in string t but not in string s.
+
+**Test Case 2**
+
+Input:
+```text
+s = ""
+t = "y"
+```
+
+Output:
+```text
+y
+```
+
+Explanation: String t contains one additional character 'y'.
+
+ 4. Algorithm
+1. Read two strings s and t.
+2. Initialize a character variable with 0.
+3. Traverse all characters of string s and perform XOR.
+4. Traverse all characters of string t and perform XOR.
+5. Since identical characters cancel each other under XOR, the remaining character is the extra character.
+6. Return the remaining character.
+
+ 5. Pseudocode
+
+```text
+START
+INPUT s, t
+SET result = 0
+
+FOR each character c in s
+    result = result XOR c
+
+FOR each character c in t
+    result = result XOR c
+
+RETURN result
+END
+``` 6. C++ Code
+
+```cpp
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Solution {
+public:
+    char findTheDifference(string s, string t) {
+        char result = 0;
+
+        for (char c : s) {
+            result ^= c;
+        }
+
+        for (char c : t) {
+            result ^= c;
+        }
+
+        return result;
+    }
+};
+
+int main() {
+    string s = "abcd";
+    string t = "abcde";
+
+    Solution obj;
+
+    cout << obj.findTheDifference(s, t) << endl;
+
+    return 0;
+}
+```
+
+ 7. Output
+
+```text
+e
+```
+
+8. Complexity Analysis
+- Time Complexity: O(n), where n is the length of string t.
+- Space Complexity: O(1).
+
+9. Learning Outcomes
+- Understood string manipulation.
+- Learned the XOR bitwise operator.
+- Understood how XOR cancels identical values.
+- Learned an efficient method for finding an additional character.
+- Improved problem-solving skills.
+
+ 10. Conclusion
+The Find the Difference problem was solved using the XOR operation. The XOR property allows identical characters to cancel each other, leaving only the additional character.
+
+---
+
+# Experiment 2.3: Predict the Winner
+
+ 1. Aim
+To determine whether Player 1 can win a game when two players take turns selecting either the first or last number from an array. Both players play optimally, and the player with the higher total score wins.
+
+ 2. Software Requirements
+- Operating System: Windows 10/11 or Linux
+- Programming Language: C++
+- IDE: VS Code / CodeBlocks / Online Compiler
+
+ 3. Test Cases
+
+**Test Case 1**
+
+Input:
+```text
+nums = [1, 5, 2]
+```
+
+Output:
+```text
+false
+```
+
+Explanation: Player 1 cannot win because Player 2 can obtain a higher score by playing optimally.
+
+**Test Case 2**
+
+Input:
+```text
+nums = [1, 5, 233, 7]
+```
+
+Output:
+```text
+true
+```
+
+Explanation: Player 1 can secure a winning score by selecting the optimal sequence of numbers.
+
+ 4. Algorithm
+1. Read the input array nums.
+2. Create a two-dimensional DP table of size n × n.
+3. Initialize dp[i][i] with nums[i].
+4. Iterate over all possible subarray lengths.
+5. For each subarray, calculate the maximum score difference.
+6. Consider two choices:
+   - Select the first element.
+   - Select the last element.
+7. Store the maximum possible score difference.
+8. If the final score difference is greater than or equal to zero, Player 1 wins or ties.
+9. Return true; otherwise return false.
+
+ 5. Pseudocode
+
+```text
+START
+INPUT nums
+SET n = size of nums
+CREATE dp[n][n]
+
+FOR i = 0 TO n-1
+    dp[i][i] = nums[i]
+
+FOR length = 2 TO n
+    FOR i = 0 TO n-length
+        SET j = i + length - 1
+
+        chooseFirst = nums[i] - dp[i+1][j]
+        chooseLast = nums[j] - dp[i][j-1]
+
+        dp[i][j] = MAX(chooseFirst, chooseLast)
+
+IF dp[0][n-1] >= 0
+    RETURN true
+ELSE
+    RETURN false
+END
+```
+
+## 6. C++ Code
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+class Solution {
+public:
+    bool PredictTheWinner(vector<int>& nums) {
+        int n = nums.size();
+
+        if (n == 0) return true;
+
+        vector<vector<int>> dp(
+            n, vector<int>(n, 0)
+        );
+
+        for (int i = 0; i < n; i++) {
+            dp[i][i] = nums[i];
+        }
+
+        for (int len = 2; len <= n; len++) {
+            for (int i = 0; i <= n - len; i++) {
+                int j = i + len - 1;
+
+                int chooseFirst =
+                    nums[i] - dp[i + 1][j];
+
+                int chooseLast =
+                    nums[j] - dp[i][j - 1];
+
+                dp[i][j] = max(
+                    chooseFirst,
+                    chooseLast
+                );
+            }
+        }
+
+        return dp[0][n - 1] >= 0;
+    }
+};
+
+int main() {
+    vector<int> nums = {1, 5, 2};
+
+    Solution obj;
+
+    if (obj.PredictTheWinner(nums))
+        cout << "true" << endl;
+    else
+        cout << "false" << endl;
+
+    return 0;
+}
+```
+
+## 7. Output
+
+```text
+false
+```
+
+## 8. Complexity Analysis
+- Time Complexity: O(n²), because all possible subarrays are evaluated.
+- Space Complexity: O(n²), for the two-dimensional DP table.
+
+## 9. Learning Outcomes
+- Understood game-based Dynamic Programming.
+- Learned optimal decision-making techniques.
+- Understood two-dimensional DP tables.
+- Learned how to maximize score differences.
+- Improved logical and analytical problem-solving skills.
+
+ 10. Conclusion
+The Predict the Winner problem was solved using Dynamic Programming. The algorithm calculates the maximum possible score difference between two players and determines whether Player 1 can win or achieve a tie.
+
+---
+
+# Overall Conclusion
+
+Through these Unit 2 experiments, I gained practical knowledge of graph traversal, graph coloring, string manipulation, bitwise operations, and Dynamic Programming.
+
+These experiments helped improve my algorithmic thinking, logical reasoning, coding efficiency, and problem-solving skills using C++.
+
+**Submitted By:** Antriksh Sharma  
+**Programme:** B.E. – Data Science  
+**Semester:** 5th Semester  
+**Subject:** Competitive Coding – II  
+**Subject Code:** 24CSP-339  
+**University:** Chandigarh University
